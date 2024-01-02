@@ -1,6 +1,6 @@
 .idea
 idea
 
-.env
+SoundApplication/.env
 ./env
 env
