@@ -31,11 +31,14 @@
         .then(data => console.log('ID: ' + data.user_id + '\nToken: ' + data.access_token))
     }
 
-    function onFailure(error) {
+    function onFailure(error)
+    {
         console.log(error)
     }
 
-    function renderButton() {
+
+    function renderButton()
+    {
         gapi.signin2.render('my-signin', {
             'scope': 'profile email',
             'width': 240,
