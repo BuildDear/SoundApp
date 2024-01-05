@@ -7,7 +7,13 @@
         content="326998347822-7t3aphjrvjqaskopfe6r32c9ldh2vjm7.apps.googleusercontent.com">
 </head>
 <body>
-<div id="my-signin"></div>
+ <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<div id="g_id_onload"
+     data-client_id="326998347822-7t3aphjrvjqaskopfe6r32c9ldh2vjm7.apps.googleusercontent.com"
+     data-callback="renderButton">
+
+</div>
 
 
 <script>
@@ -51,7 +57,5 @@
     }
 </script>
 
-
-<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
 </body>
 </html>
