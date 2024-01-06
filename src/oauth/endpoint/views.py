@@ -1,6 +1,6 @@
 from rest_framework import viewsets, parsers, permissions
 
-from src.oauth import serializer
+from src.oauth import serializer, models
 
 
 class UserView(viewsets.ModelViewSet):
@@ -15,3 +15,11 @@ class UserView(viewsets.ModelViewSet):
 
     def get_object(self):
         return self.get_queryset()
+
+
+class AuthorView(viewsets.ReadOnlyModelViewSet):
+    """ View and edit author data
+    """
+    queryset = models.AuthUser.objects.all()
+    serializer_class = serializer.AuthorSerializer
+
