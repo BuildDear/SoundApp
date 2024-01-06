@@ -30,3 +30,9 @@ class SocialLinkView(viewsets.ModelViewSet):
     """
     serializer_class = serializer.SocialLinkSerializer
     permission_classes = [IsAuthor]
+
+    def get_queryset(self):
+        return self.request.user.social_links.all()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
