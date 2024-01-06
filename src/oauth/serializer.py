@@ -18,7 +18,7 @@ class SocialLinkSerializer(serializers.ModelSerializer):
 
 
 class AuthorSerializer(serializers.ModelSerializer):
-    social_links = SocialLinkSerializer()
+    social_links = SocialLinkSerializer(many=True)
 
     class Meta:
         model = models.AuthUser

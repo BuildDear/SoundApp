@@ -21,7 +21,7 @@ class UserView(viewsets.ModelViewSet):
 class AuthorView(viewsets.ReadOnlyModelViewSet):
     """ View and edit author data
     """
-    queryset = models.AuthUser.objects.all()
+    queryset = models.AuthUser.objects.all().prefetch_related('social_links')
     serializer_class = serializer.AuthorSerializer
 
 
