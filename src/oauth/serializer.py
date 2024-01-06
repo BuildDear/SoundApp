@@ -15,6 +15,12 @@ class AuthorSerializer(serializers.ModelSerializer):
         fields = ('id', 'avatar', 'country', 'city', 'bio', 'display_name')
 
 
+class SocialLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SocialLink
+        fields = ('link',)
+
+
 class GoogleAuth(serializers.Serializer):
     email = serializers.EmailField()
     token = serializers.CharField()

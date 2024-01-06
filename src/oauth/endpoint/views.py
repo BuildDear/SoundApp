@@ -23,3 +23,8 @@ class AuthorView(viewsets.ReadOnlyModelViewSet):
     queryset = models.AuthUser.objects.all()
     serializer_class = serializer.AuthorSerializer
 
+
+class SocialLinkView(viewsets.ModelViewSet):
+    """ CRUD Social Link
+    """
+    serializer_class = serializer.SocialLinkSerializer
