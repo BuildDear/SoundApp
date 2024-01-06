@@ -6,14 +6,20 @@ urlpatterns = [
     path('', auth_views.google_login),
     path('google/', auth_views.google_auth),
 
-    path('me/', views.UserView.as_view({'get': 'retrieve', 'put': 'update'})),
-
-    path('author/', views.AuthorView.as_view({'get': 'list'})),
-    path('author/<int:pk>', views.AuthorView.as_view({'get': 'retrieve'})),
+    path('me/', views.UserView.as_view(
+        {
+            'get': 'retrieve', 'put': 'update'
+        })),
 
     path('social/', views.SocialLinkView.as_view(
         {
             'get': 'list', 'post': 'create', 'put': 'update', 'delete': 'destroy'
         })),
-    path('social/<int:pk>', views.SocialLinkView.as_view({'get': 'retrieve'})),
+    path('social/<int:pk>', views.SocialLinkView.as_view(
+        {
+            'put': 'update', 'delete': 'destroy'
+        })),
+
+    path('author/', views.AuthorView.as_view({'get': 'list'})),
+    path('author/<int:pk>', views.AuthorView.as_view({'get': 'retrieve'})),
 ]
