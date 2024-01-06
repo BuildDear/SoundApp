@@ -1,5 +1,6 @@
 from rest_framework import viewsets, parsers, permissions
 
+from src.base.permissions import IsAuthor
 from src.oauth import serializer, models
 
 
@@ -28,3 +29,4 @@ class SocialLinkView(viewsets.ModelViewSet):
     """ CRUD Social Link
     """
     serializer_class = serializer.SocialLinkSerializer
+    permission_classes = [IsAuthor]
