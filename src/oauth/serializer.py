@@ -16,9 +16,11 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class SocialLinkSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = models.SocialLink
-        fields = ('link',)
+        fields = ('id', 'link',)
 
 
 class GoogleAuth(serializers.Serializer):
