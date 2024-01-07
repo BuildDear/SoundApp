@@ -19,6 +19,12 @@ def get_path_upload_track(instance, file):
     return f'track/user_{instance.id}/{file}'
 
 
+def get_path_upload_cover_playlist(instance, file):
+    """ Path creation, format: (media)/playlist/user_id/photo.jpg
+    """
+    return f'playlist/user_{instance.id}/{file}'
+
+
 def validate_size_image(file_obj):
     """ Check size of file
     """
