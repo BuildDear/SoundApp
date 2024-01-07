@@ -7,13 +7,9 @@
         content="326998347822-7t3aphjrvjqaskopfe6r32c9ldh2vjm7.apps.googleusercontent.com">
 </head>
 <body>
- <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-<div id="g_id_onload"
-     data-client_id="326998347822-7t3aphjrvjqaskopfe6r32c9ldh2vjm7.apps.googleusercontent.com"
-     data-callback="renderButton">
 
-</div>
+<div id="my-signin" class="g-signin2" data-onsuccess="onSuccess" data-onfailure="onFailure"></div>
 
 
 <script>
@@ -42,20 +38,7 @@
         console.log(error)
     }
 
-
-    function renderButton()
-    {
-        gapi.signin2.render('my-signin', {
-            'scope': 'profile email',
-            'width': 240,
-            'height': 50,
-            'longtitle': true,
-            'theme': 'dark',
-            'onsuccess': onSuccess,
-            'onfailure': onFailure
-        });
-    }
 </script>
 
-</body>
+<script src="https://apis.google.com/js/platform.js" async defer></script></body>
 </html>

@@ -3,7 +3,7 @@ from django.urls import path
 from .endpoint import auth_views, views
 
 urlpatterns = [
-    path('', auth_views.google_login),
+    path('', auth_views.google_login, name='google-login'),
     path('google/', auth_views.google_auth),
 
     path('me/', views.UserView.as_view(
