@@ -8,9 +8,15 @@ def get_path_upload_avatar(instance, file):
 
 
 def get_path_upload_cover_album(instance, file):
-    """ Path creation, format: (media)/avatar/user_id/photo.jpg
+    """ Path creation, format: (media)/album/user_id/photo.jpg
     """
     return f'album/user_{instance.id}/{file}'
+
+
+def get_path_upload_track(instance, file):
+    """ Path creation, format: (media)/track/user_id/photo.jpg
+    """
+    return f'track/user_{instance.id}/{file}'
 
 
 def validate_size_image(file_obj):
