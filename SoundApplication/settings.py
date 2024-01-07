@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     'src.oauth',
+    'src.audio_lib',
 ]
 
 MIDDLEWARE = [

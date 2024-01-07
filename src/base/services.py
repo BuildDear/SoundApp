@@ -7,6 +7,7 @@ def get_path_upload_avatar(instance, file):
 
     return f'avatar/{instance.id}/{file}'
 
+
 def validate_size_image(file_obj):
     """ Check size of file
     """
