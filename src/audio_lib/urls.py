@@ -1,10 +1,9 @@
 from django.urls import path
 
+from src.audio_lib import views
+
 urlpatterns = [
 
-    # path('me/', views.UserView.as_view(
-    #     {
-    #         'get': 'retrieve', 'put': 'update'
-    #     })),
+    path('genre/', views.GenreView.as_view()),
 
 ]
