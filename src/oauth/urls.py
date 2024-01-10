@@ -6,6 +6,8 @@ urlpatterns = [
     path('', auth_views.google_login, name='google-login'),
     path('google/', auth_views.google_auth),
 
+    path('users/', views.RegistrationView.as_view()),
+
     path('me/', views.UserView.as_view(
         {
             'get': 'retrieve', 'put': 'update'

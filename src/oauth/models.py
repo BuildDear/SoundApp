@@ -54,6 +54,8 @@ class AuthUser(models.Model):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['email']
 
+    objects = UserManager()
+
     def __str__(self):
         return self.email
 
