@@ -124,7 +124,7 @@ ACCESS_TOKEN_EXPIRE_MINUTE = 60 * 24
 # ===    REST FRAMEWORK CREDENTIALS     === #
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES': ('src.oauth.services.auth_backend.AuthBackend',),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('src.oauth.services.auth_backend.AuthBackend',),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
