@@ -68,7 +68,6 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
     )
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['email']
 
     objects = UserManager()
 

@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from src.base.permissions import IsAuthor
 from src.oauth import serializer, models
-from src.oauth.serializer import RegistrationSerializer
+from src.oauth.serializer import RegistrationSerializer, LoginSerializer
 from src.oauth.services.renders import UserJSONRenderer
 
 
@@ -24,6 +24,22 @@ class RegistrationView(APIView):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class LoginAPIView(APIView):
+    """ Custom login view
+    """
+    permission_classes = (AllowAny,)
+    renderer_classes = (UserJSONRenderer,)
+    serializer_class = LoginSerializer
+
+    def post(self, request):
+        user = request.data.get('user', {})
+
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class UserView(viewsets.ModelViewSet):
