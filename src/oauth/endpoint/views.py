@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from src.base.permissions import IsAuthor
 from src.oauth import serializer, models
 from src.oauth.serializer import RegistrationSerializer
+from src.oauth.services.renders import UserJSONRenderer
 
 
 class RegistrationView(APIView):
@@ -13,6 +14,7 @@ class RegistrationView(APIView):
     """
     permission_classes = (AllowAny,)
     serializer_class = RegistrationSerializer
+    renderer_classes = (UserJSONRenderer,)
 
     def post(self, request):
         user = request.data.get('user', {})
