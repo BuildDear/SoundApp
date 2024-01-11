@@ -39,7 +39,6 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
     """ User model on my platform
     """
     email = models.EmailField(max_length=150, unique=True)
-    password = models.CharField(null=False, max_length=128)
     join_date = models.DateField(auto_now_add=True)
     country = models.CharField(max_length=30, blank=True, null=True)
     city = models.CharField(max_length=30, blank=True, null=True)
