@@ -1,25 +1,56 @@
-asgiref==3.7.2
-cachetools==5.3.2
-certifi==2023.11.17
-charset-normalizer==3.3.2
-Django==5.0.1
-djangorestframework==3.14.0
-drf-yasg==1.21.7
-google-auth==2.26.1
-idna==3.6
-inflection==0.5.1
-mysqlclient==2.2.1
-packaging==23.2
-pillow==10.2.0
-pyasn1==0.5.1
-pyasn1-modules==0.3.0
-PyJWT==2.8.0
-python-dotenv==1.0.0
-pytz==2023.3.post1
-PyYAML==6.0.1
-requests==2.31.0
-rsa==4.9
-sqlparse==0.4.4
-tzdata==2023.4
-uritemplate==4.1.1
-urllib3==2.1.0
+# =====================
+# Web Frameworks & ORM
+# =====================
+asgiref==3.7.2       # ASGI (Asynchronous Server Gateway Interface) for Django
+Django==5.0.1        # Django web framework
+
+# =====================
+# Database
+# =====================
+mysqlclient==2.2.1   # MySQL database client for Django
+
+# =====================
+# REST Framework
+# =====================
+djangorestframework==3.14.0  # Django REST framework
+drf-yasg==1.21.7     # Yet Another Swagger Generator for Django REST framework
+
+# =====================
+# Profiling & Optimization
+# =====================
+django-silk==5.0.4    # Profiling tool for Django applications
+gprof2dot==2022.7.29  # Converts gprof output to dot format
+
+# =====================
+# Authentication & Authorization
+# =====================
+google-auth==2.26.1   # Google Authentication Library for Python
+PyJWT==2.8.0          # JSON Web Token implementation for Python
+
+# =====================
+# HTTP & URL Handling
+# =====================
+urllib3==2.1.0        # HTTP library with thread-safe connection pooling
+
+# =====================
+# Development & Coding Standards
+# =====================
+autopep8==2.0.4        # Automatically formats Python code to comply with PEP 8
+pycodestyle==2.11.1    # Python style guide checker
+packaging==23.2        # Core utilities for Python packages
+
+# =====================
+# Utility & Miscellaneous
+# =====================
+cachetools==5.3.2        # Caching library for Python
+certifi==2023.11.17      # Certificates bundle for Python
+charset-normalizer==3.3.2  # URL normalization library
+inflection==0.5.1         # Pluralization and singularization of words
+pytz==2023.3.post1        # Time zone definitions for Python
+PyYAML==6.0.1             # YAML parsing and output library
+requests==2.31.0          # HTTP library for making requests
+rsa==4.9                  # RSA (Rivest-Shamir-Adleman) public key cryptography library
+sqlparse==0.4.4           # SQL parsing and formatting library
+tzdata==2023.4            # Time zone data for Python
+uritemplate==4.1.1        # URI template library
+python-dotenv==1.0.0       # Python-dotenv for managing environment variables
