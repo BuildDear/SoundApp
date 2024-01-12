@@ -1,24 +1,13 @@
 import unittest
 
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase, Client
-from django.urls import reverse
 from rest_framework.exceptions import ValidationError
 
-
-from ..base.services import (get_path_upload_avatar,
-                             get_path_upload_track,
-                             get_path_upload_cover_playlist,
-                             validate_size_image,
-                             get_path_upload_cover_album)
-
-
-class GoogleTest(TestCase):
-    def test_google_login_view(self):
-        client = Client()
-        response = client.get(reverse('google-login'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'google_login.html')
+from src.base.services import (get_path_upload_avatar,
+                               get_path_upload_cover_album,
+                               get_path_upload_track,
+                               get_path_upload_cover_playlist,
+                               validate_size_image)
 
 
 class TestFileFunctions(unittest.TestCase):

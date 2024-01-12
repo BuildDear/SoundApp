@@ -75,6 +75,7 @@ class SocialLinkSerializer(serializers.ModelSerializer):
 
 
 class AuthorSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True, required=False)
     social_links = SocialLinkSerializer(many=True)
 
     class Meta:

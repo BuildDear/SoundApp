@@ -18,4 +18,5 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('auth/', include('src.oauth.urls')),
     path('audio/', include('src.audio_lib.urls')),
+    path('silk/', include('silk.urls')),
 ]
