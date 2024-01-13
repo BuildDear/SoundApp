@@ -2,7 +2,7 @@ from rest_framework import generics, viewsets, parsers
 from rest_framework.permissions import AllowAny
 
 from src.audio_lib import models, serializer
-from src.base.classes import MixedSerializer
+from src.base.classes import MixedSerializer, Pagination
 from src.base.permissions import IsAuthor
 from src.base.services import delete_old_file
 
@@ -32,7 +32,7 @@ class AlbumView(viewsets.ModelViewSet):
     """
     parser_classes = (parsers.MultiPartParser,)
     serializer_class = serializer.AlbumSerializer
-    permission_classes = [AllowAny,]
+    permission_classes = [AllowAny, ]
 
     def get_queryset(self):
         return models.Album.objects.filter(user=self.request.user)
@@ -102,6 +102,8 @@ class TrackListView(generics.ListAPIView):
     """
     queryset = models.Track.objects.filter(album__private=False, private=False)
     serializer_class = serializer.AuthorTrackSerializer
+    pagination_class = Pagination
+    filterset_fields = ['title', 'user__display_name', 'album__name', 'genre__name']
 
 
 class AuthorTrackListView(generics.ListAPIView):
@@ -109,7 +111,6 @@ class AuthorTrackListView(generics.ListAPIView):
     """
     serializer_class = serializer.AuthorTrackSerializer
     pagination_class = Pagination
-    filter_backends = [DjangoFilterBackend]
     filterset_fields = ['title', 'album__name', 'genre__name']
 
     def get_queryset(self):

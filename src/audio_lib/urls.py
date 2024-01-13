@@ -17,6 +17,9 @@ urlpatterns = [
     path('track/', views.TrackView.as_view({'get': 'list', 'post': 'create'})),
     path('track/<int:pk>/', views.TrackView.as_view({'put': 'update', 'delete': 'destroy'})),
 
+    path('track-list/', views.TrackListView.as_view()),
+    path('author-track-list/<int:pk>', views.AuthorTrackListView.as_view()),
+
     path('playlist/', views.PlayListView.as_view({'get': 'list', 'post': 'create'})),
     path('playlist/<int:pk>/', views.PlayListView.as_view({'put': 'update', 'delete': 'destroy'})),
 
