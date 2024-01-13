@@ -52,3 +52,24 @@ class PublicAlbumView(generics.ListAPIView):
     def get_queryset(self):
         return models.Album.objects.filter(user__id=self.kwargs.get('pk'), private=False)
 
+
+class TrackView(viewsets.ModelViewSet):
+    """ CRUD tracks
+    """
+    parser_classes = (parsers.MultiPartParser,)
+    permission_classes = [IsAuthor]
+    serializer_class = serializer.CreateAuthorTrackSerializer
+    serializer_classes_by_action = {
+        'list': serializer.AuthorTrackSerializer
+    }
+
+    def get_queryset(self):
+        return models.Track.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def perform_destroy(self, instance):
+        delete_old_file(instance.cover.path)
+        delete_old_file(instance.file.path)
+        instance.delete()
