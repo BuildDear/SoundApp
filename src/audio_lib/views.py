@@ -51,3 +51,4 @@ class PublicAlbumView(generics.ListAPIView):
 
     def get_queryset(self):
         return models.Album.objects.filter(user__id=self.kwargs.get('pk'), private=False)
+
