@@ -24,8 +24,8 @@ class AlbumSerializer(BaseSerializer):
         model = models.Album
         fields = ('id', 'name', 'description', 'cover', 'private')
 
-        def update(self, instance, validated_data):
-            delete_old_file(instance.cover.path)
-            return super().update(instance, validated_data)
+    def update(self, instance, validated_data):
+        delete_old_file(instance.cover.path)
+        return super().update(instance, validated_data)
 
 
