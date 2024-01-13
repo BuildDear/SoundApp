@@ -1,4 +1,4 @@
-from rest_framework import viewsets, parsers, permissions, status
+from rest_framework import viewsets, parsers, permissions, status, generics
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -75,3 +75,4 @@ class SocialLinkView(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+

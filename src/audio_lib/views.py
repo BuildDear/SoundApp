@@ -42,3 +42,12 @@ class AlbumView(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         delete_old_file(instance.cover.path)
         instance.delete()
+
+
+class PublicAlbumView(generics.ListAPIView):
+    """ List of public author`s albums
+    """
+    serializer_class = serializer.AlbumSerializer
+
+    def get_queryset(self):
+        return models.Album.objects.filter(user__id=self.kwargs.get('pk'), private=False)
