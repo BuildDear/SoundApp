@@ -2,6 +2,7 @@ from rest_framework import generics, viewsets, parsers
 from rest_framework.permissions import AllowAny
 
 from src.audio_lib import models, serializer
+from src.base.classes import MixedSerializer
 from src.base.permissions import IsAuthor
 from src.base.services import delete_old_file
 
@@ -53,7 +54,7 @@ class PublicAlbumView(generics.ListAPIView):
         return models.Album.objects.filter(user__id=self.kwargs.get('pk'), private=False)
 
 
-class TrackView(viewsets.ModelViewSet):
+class TrackView(MixedSerializer, viewsets.ModelViewSet):
     """ CRUD tracks
     """
     parser_classes = (parsers.MultiPartParser,)
