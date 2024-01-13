@@ -95,3 +95,24 @@ class PlayListView(MixedSerializer, viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         delete_old_file(instance.cover.path)
         instance.delete()
+
+
+class TrackListView(generics.ListAPIView):
+    """ List of all tracks
+    """
+    queryset = models.Track.objects.filter(album__private=False, private=False)
+    serializer_class = serializer.AuthorTrackSerializer
+
+
+class AuthorTrackListView(generics.ListAPIView):
+    """ List of all author`s tracks
+    """
+    serializer_class = serializer.AuthorTrackSerializer
+    pagination_class = Pagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['title', 'album__name', 'genre__name']
+
+    def get_queryset(self):
+        return models.Track.objects.filter(
+            user__id=self.kwargs.get('pk'), album__private=False, private=False
+        )
