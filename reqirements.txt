@@ -20,6 +20,8 @@ drf-yasg==1.21.7     # Yet Another Swagger Generator for Django REST framework
 # =====================
 django-silk==5.0.4    # Profiling tool for Django applications
 gprof2dot==2022.7.29  # Converts gprof output to dot format
+django-filter==23.5   # For filter queries
+
 
 # =====================
 # Authentication & Authorization

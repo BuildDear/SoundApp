@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'silk',
+    'django_filters',
 
     'src.oauth',
     'src.audio_lib',
@@ -132,6 +133,7 @@ REST_FRAMEWORK = {
     ],
     'EXCEPTION_HANDLER': 'SoundApplication.exceptions.core_exception_handler',
     'NON_FIELD_ERRORS_KEY': 'error',
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 # ===    SWAGGER CREDENTIALS     === #
