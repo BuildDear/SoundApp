@@ -18,6 +18,7 @@ urlpatterns = [
     path('track/<int:pk>/', views.TrackView.as_view({'put': 'update', 'delete': 'destroy'})),
 
     path('sream-track/<int:pk>', views.StreamingFileView.as_view()),
+    path('download-track/<int:pk>', views.DownloadTrackView.as_view()),
 
     path('track-list/', views.TrackListView.as_view()),
     path('author-track-list/<int:pk>', views.AuthorTrackListView.as_view()),
