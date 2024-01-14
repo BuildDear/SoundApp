@@ -1,10 +1,41 @@
+from datetime import datetime, timedelta
+
+from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin, Group, Permission
 from django.core.validators import FileExtensionValidator
 from django.db import models
+import jwt
 
+from SoundApplication import settings
 from src.base.services import get_path_upload_avatar, validate_size_image
 
 
-class AuthUser(models.Model):
+class UserManager(BaseUserManager):
+
+    def create_user(self, email, password=None):
+
+        if email is None:
+            raise TypeError('Users must have an email address.')
+
+        user = self.model(email=self.normalize_email(email))
+        user.set_password(password)
+        user.save()
+
+        return user
+
+    def create_superuser(self, email, password):
+        if password is None:
+            raise TypeError('Superusers must have a password.')
+
+        user = self.create_user(email, password)
+        user.is_superuser = True
+        user.is_staff = True
+        user.save()
+
+        return user
+
+
+class AuthUser(AbstractBaseUser, PermissionsMixin):
     """ User model on my platform
     """
     email = models.EmailField(max_length=150, unique=True)
@@ -19,6 +50,25 @@ class AuthUser(models.Model):
         null=True,
         validators=[FileExtensionValidator(allowed_extensions=['jpg']), validate_size_image]
     )
+    groups = models.ManyToManyField(
+        Group,
+        related_name="custom_user_groups",
+        blank=True,
+        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+        verbose_name='groups'
+    )
+
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name="custom_user_permissions",
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions'
+    )
+
+    USERNAME_FIELD = 'email'
+
+    objects = UserManager()
 
     def __str__(self):
         return self.email
@@ -26,6 +76,17 @@ class AuthUser(models.Model):
     @property
     def is_authenticated(self):
         return True
+
+    # For custom auth
+    def _generate_jwt_token(self):
+        dt = datetime.now() + timedelta(days=1)
+
+        token = jwt.encode({
+            'id': self.pk,
+            'exp': int(dt.strftime('%s'))
+        }, settings.SECRET_KEY, algorithm='HS256')
+
+        return token.decode('utf-8')
 
 
 class Follower(models.Model):
@@ -46,4 +107,3 @@ class SocialLink(models.Model):
 
     def __str__(self):
         return f'self.user'
-

@@ -23,6 +23,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'drf_yasg',
+    'silk',
 
     'src.oauth',
     'src.audio_lib',
@@ -36,6 +37,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'silk.middleware.SilkyMiddleware',
 ]
 
 ROOT_URLCONF = 'SoundApplication.urls'
@@ -124,10 +126,12 @@ ACCESS_TOKEN_EXPIRE_MINUTE = 60 * 24
 # ===    REST FRAMEWORK CREDENTIALS     === #
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('src.oauth.services.auth_backend.AuthBackend',),
+    # 'DEFAULT_AUTHENTICATION_CLASSES': ('src.oauth.services.auth_backend.AuthBackend',),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
-    ]
+    ],
+    'EXCEPTION_HANDLER': 'SoundApplication.exceptions.core_exception_handler',
+    'NON_FIELD_ERRORS_KEY': 'error',
 }
 
 # ===    SWAGGER CREDENTIALS     === #

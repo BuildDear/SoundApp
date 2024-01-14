@@ -3,6 +3,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('src.oauth.urls')),
     path('api/v1/', include('src.routes')),
+    path('', include('src.oauth.urls')),
+    path('', include('src.audio_lib.urls')),
 ]
