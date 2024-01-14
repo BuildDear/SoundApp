@@ -5,10 +5,6 @@ idea
 ./env
 env
 
-.env.dev
-./.env.dev
-env.dev
-
 !media/.gitkeep
 media/*
 

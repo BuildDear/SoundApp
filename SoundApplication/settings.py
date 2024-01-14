@@ -75,21 +75,13 @@ WSGI_APPLICATION = 'SoundApplication.wsgi.application'
 # Database
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': os.getenv('SQL_ENGINE'),
-    #     'NAME': os.getenv('SQL_NAME'),
-    #     'USER': os.getenv('SQL_USER'),
-    #     'PASSWORD': os.getenv('SQL_PASSWORD'),
-    #     'HOST': os.getenv('SQL_HOST'),
-    #     'PORT': os.getenv('SQL_PORT'),
-    # },
-    'second_database': {
-        'ENGINE': os.getenv('POSTGRES_ENGINE'),
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('POSTGRES_HOST'),
-        'PORT': os.getenv('POSTGRES_PORT'),
+    'default': {
+        'ENGINE': os.getenv('SQL_ENGINE'),
+        'NAME': os.getenv('SQL_NAME'),
+        'USER': os.getenv('SQL_USER'),
+        'PASSWORD': os.getenv('SQL_PASSWORD'),
+        'HOST': os.getenv('SQL_HOST'),
+        'PORT': os.getenv('SQL_PORT'),
     }
 }
 
