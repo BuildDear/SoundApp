@@ -1,4 +1,8 @@
-from rest_framework import generics, viewsets, parsers
+import os.path
+
+from django.http import FileResponse, Http404
+from rest_framework import generics, viewsets, parsers, views
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 
 from src.audio_lib import models, serializer
@@ -117,3 +121,18 @@ class AuthorTrackListView(generics.ListAPIView):
         return models.Track.objects.filter(
             user__id=self.kwargs.get('pk'), album__private=False, private=False
         )
+
+
+class StreamingFileView(views.APIView):
+
+    def set_play(self, track):
+        track.plays_count +=1
+        track.save()
+
+    def get(self, request, pk):
+        track = get_object_or_404(models.Track, id=pk)
+        if os.path.exists(track.file.path):
+            self.set_play(track)
+            return FileResponse(open(track.file.path, 'rb'), filename=track.file.name)
+        else:
+            raise Http404("File not found")
