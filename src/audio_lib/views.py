@@ -6,6 +6,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 
 from src.audio_lib import models, serializer
+from src.audio_lib.models import Track
 from src.base.classes import MixedSerializer, Pagination
 from src.base.permissions import IsAuthor
 from src.base.services import delete_old_file
@@ -124,9 +125,10 @@ class AuthorTrackListView(generics.ListAPIView):
 
 
 class StreamingFileView(views.APIView):
-
-    def set_play(self, track):
-        track.plays_count +=1
+    """ Running track
+    """
+    def set_play(self, track: Track) -> None:
+        track.plays_count += 1
         track.save()
 
     def get(self, request, pk):
@@ -134,5 +136,23 @@ class StreamingFileView(views.APIView):
         if os.path.exists(track.file.path):
             self.set_play(track)
             return FileResponse(open(track.file.path, 'rb'), filename=track.file.name)
+        else:
+            raise Http404("File not found")
+
+
+class DownloadTrackView(views.APIView):
+    """ Downloading track
+    """
+
+    def set_download(self) -> None:
+        self.track.download += 1
+        self.track.save()
+
+    def get(self, request, pk):
+        self.track = get_object_or_404(models.Track, id=pk)
+        if os.path.exists(self.track.file.path):
+            self.set_download()
+            return FileResponse(
+                open(self.track.file.path, 'rb'), filename=self.track.file.name, as_attachment=True )
         else:
             raise Http404("File not found")
