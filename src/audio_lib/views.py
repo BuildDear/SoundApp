@@ -162,9 +162,8 @@ class DownloadTrackView(views.APIView):
 
 
 class CommentAuthorView(viewsets.ModelViewSet):
-    """ CRUD playlists
+    """ CRUD author`s comments
     """
-
     serializer_class = serializer.CommentAuthorSerializer
     permission_classes = [IsAuthor,]
 
@@ -174,4 +173,12 @@ class CommentAuthorView(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+
+class CommentView(viewsets.ModelViewSet):
+    """ Track`s comments
+    """
+    serializer_class = serializer.CommentSerializer
+
+    def get_queryset(self):
+        return models.Comment.objects.filter(track_id=self.kwargs.get('pk'))
 
