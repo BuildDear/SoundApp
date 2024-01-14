@@ -7,3 +7,5 @@ env
 
 !media/.gitkeep
 media/*
+
+__pycache__/
