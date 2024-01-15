@@ -1,9 +1,12 @@
 .idea
 idea
 
-SoundApplication/.env
+.env
 ./env
 env
+
+.env.dev
+./.env.dev
 
 !media/.gitkeep
 media/*

@@ -20,6 +20,11 @@ def get_path_upload_track(instance, file):
     """
     return f'track/user_{instance.user.id}/{file}'
 
+def get_path_upload_cover_track(instance, file):
+    """ Path creation, format: (media)/track/cover/user_id/photo.jpg
+    """
+    return f'track/cover/user_{instance.user.id}/{file}'
+
 
 def get_path_upload_cover_playlist(instance, file):
     """ Path creation, format: (media)/playlist/user_id/photo.jpg
