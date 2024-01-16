@@ -19,4 +19,6 @@ urlpatterns = [
     path('auth/', include('src.oauth.urls')),
     path('audio/', include('src.audio_lib.urls')),
     path('silk/', include('silk.urls')),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
 ]

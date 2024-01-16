@@ -12,7 +12,7 @@ from src.base.services import get_path_upload_avatar, validate_size_image
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, email, password=None):
+    def create_user(self, email, username=None, password=None):
 
         if email is None:
             raise TypeError('Users must have an email address.')

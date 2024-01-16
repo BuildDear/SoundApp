@@ -9,6 +9,7 @@ from src.oauth.serializer import RegistrationSerializer, LoginSerializer
 from src.oauth.services.renders import UserJSONRenderer
 
 
+# Own REGISTRATION
 class RegistrationView(APIView):
     """ Custom user registration
     """
@@ -26,6 +27,7 @@ class RegistrationView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+# Own LOGIN
 class LoginAPIView(APIView):
     """ Custom login view
     """
@@ -75,4 +77,3 @@ class SocialLinkView(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-

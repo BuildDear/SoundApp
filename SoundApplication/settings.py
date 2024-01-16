@@ -158,10 +158,13 @@ SWAGGER_SETTINGS = {
             'name': 'Authorization',
             'in': 'header'
         }
-    }
+    },
 }
 
+
 # ===    JWT CREDENTIALS     === #
+
+AUTH_USER_MODEL = 'oauth.AuthUser'
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
@@ -189,6 +192,8 @@ DJOSER = {
     'TOKEN_MODEL': None,  # We use only JWT
     'ACTIVATION_URL': 'auth/verify/{uid}/{token}/',
     "SERIALIZERS": {
-        'user_create': 'src.oauth.serializer.RegistrationSerializer',
+        'user_create': 'src.oauth.serializer.UserSerializer',
     },
+    'LOGIN_FIELD': 'email',
+    'LOGOUT_ON_PASSWORD_CHANGE': True,
 }

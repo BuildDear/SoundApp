@@ -14,7 +14,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.AuthUser
-        fields = ['email', 'password',]
+        fields = ['email', 'password', ]
 
     def create(self, validated_data):
         return AuthUser.objects.create_user(**validated_data)
@@ -62,6 +62,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.AuthUser
         fields = ('avatar', 'country', 'city', 'bio', 'display_name')
+        ref_name = 'CustomUserSerializer'
 
 
 class SocialLinkSerializer(serializers.ModelSerializer):
