@@ -12,11 +12,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
         write_only=True
     )
 
-    token = serializers.CharField(max_length=255, read_only=True)
-
     class Meta:
         model = models.AuthUser
-        fields = ['email', 'password', 'token']
+        fields = ['email', 'password',]
 
     def create(self, validated_data):
         return AuthUser.objects.create_user(**validated_data)

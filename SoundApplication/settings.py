@@ -1,7 +1,7 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
-
 
 load_dotenv()
 
@@ -130,18 +130,19 @@ GOOGLE_CLIENT_ID = os.getenv('GOOGLE_OAUTH2_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_OAUTH2_CLIENT_SECRET')
 GOOGLE_EXTRA_DATA = ['first_name', 'last_name']
 
-# ===    JWT CREDENTIALS     === #
-
-ALGORITHM = 'H256'
-ACCESS_TOKEN_EXPIRE_MINUTE = 60 * 24
 
 # ===    REST FRAMEWORK CREDENTIALS     === #
 
 REST_FRAMEWORK = {
+
     # Own authentication
     # 'DEFAULT_AUTHENTICATION_CLASSES': ('src.oauth.services.auth_backend.JWTAuthentication',),
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': (
-       'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.AllowAny',
     ),
     'EXCEPTION_HANDLER': 'SoundApplication.exceptions.core_exception_handler',
     'NON_FIELD_ERRORS_KEY': 'error',
@@ -160,3 +161,34 @@ SWAGGER_SETTINGS = {
     }
 }
 
+# ===    JWT CREDENTIALS     === #
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',),
+
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),
+    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=59),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": False,
+
+    "ALGORITHM": "HS256",
+    "VERIFYING_KEY": "",
+    "AUDIENCE": None,
+    "ISSUER": None,
+    "JSON_ENCODER": None,
+    "JWK_URL": None,
+    "LEEWAY": 0,
+}
+
+DJOSER = {
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    'SEND_ACTIVATION_EMAIL': False,
+    'SET_PASSWORD_RETYPE': False,
+    'PASSWORD_RESET_CONFIRM_RETYPE': False,
+    'TOKEN_MODEL': None,  # We use only JWT
+    'ACTIVATION_URL': 'auth/verify/{uid}/{token}/',
+    "SERIALIZERS": {
+        'user_create': 'src.oauth.serializer.RegistrationSerializer',
+    },
+}
