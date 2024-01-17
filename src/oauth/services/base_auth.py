@@ -3,7 +3,9 @@ from datetime import timedelta, datetime
 import jwt
 from django.conf import settings
 
+from src.oauth.services.google import log_function_call
 
+@log_function_call
 def create_token(user_id: int) -> dict[str, str | int]:
     """Token creation"""
     access_token_expires: timedelta = timedelta(
@@ -17,7 +19,7 @@ def create_token(user_id: int) -> dict[str, str | int]:
         "token_type": "Token",
     }
 
-
+@log_function_call
 def create_access_token(data: dict, expires_delta: timedelta = None) -> str:
     """Access token creation"""
     to_encode = data.copy()
