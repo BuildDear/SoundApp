@@ -6,4 +6,6 @@ urlpatterns = [
     path('api/v1/', include('src.routes')),
     path('', include('src.oauth.urls')),
     path('', include('src.audio_lib.urls')),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
 ]
