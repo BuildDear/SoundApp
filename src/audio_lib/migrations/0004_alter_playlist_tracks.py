@@ -4,15 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('audio_lib', '0003_track_cover'),
+        ("audio_lib", "0003_track_cover"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='playlist',
-            name='tracks',
-            field=models.ManyToManyField(blank=True, null=True, related_name='track_play_lists', to='audio_lib.track'),
+            model_name="playlist",
+            name="tracks",
+            field=models.ManyToManyField(
+                blank=True,
+                null=True,
+                related_name="track_play_lists",
+                to="audio_lib.track",
+            ),
         ),
     ]

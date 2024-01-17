@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('oauth', '0001_initial'),
+        ("oauth", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='authuser',
-            name='email',
+            model_name="authuser",
+            name="email",
             field=models.EmailField(db_index=True, max_length=254, unique=True),
         ),
     ]

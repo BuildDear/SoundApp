@@ -11,14 +11,14 @@ from src.oauth.services.renders import UserJSONRenderer
 
 # Own REGISTRATION
 class RegistrationView(APIView):
-    """ Custom user registration
-    """
+    """Custom user registration"""
+
     permission_classes = (AllowAny,)
     serializer_class = RegistrationSerializer
     renderer_classes = (UserJSONRenderer,)
 
     def post(self, request):
-        user = request.data.get('user', {})
+        user = request.data.get("user", {})
 
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
@@ -29,14 +29,14 @@ class RegistrationView(APIView):
 
 # Own LOGIN
 class LoginAPIView(APIView):
-    """ Custom login view
-    """
+    """Custom login view"""
+
     permission_classes = (AllowAny,)
     renderer_classes = (UserJSONRenderer,)
     serializer_class = LoginSerializer
 
     def post(self, request):
-        user = request.data.get('user', {})
+        user = request.data.get("user", {})
 
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
@@ -45,8 +45,8 @@ class LoginAPIView(APIView):
 
 
 class UserView(viewsets.ModelViewSet):
-    """ View and edit user data
-    """
+    """View and edit user data"""
+
     parser_classes = (parsers.MultiPartParser,)
     serializer_class = serializer.UserSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -59,18 +59,20 @@ class UserView(viewsets.ModelViewSet):
 
 
 class AuthorView(viewsets.ReadOnlyModelViewSet):
-    """ View and edit author data
-    """
-    queryset = models.AuthUser.objects.all().prefetch_related('social_links')
+    """View and edit author data"""
+
+    queryset = models.AuthUser.objects.all().prefetch_related("social_links")
     serializer_class = serializer.AuthorSerializer
 
 
 class SocialLinkView(viewsets.ModelViewSet):
-    """ CRUD Social Link
-    """
+    """CRUD Social Link"""
+
     serializer_class = serializer.SocialLinkSerializer
     # permission_classes = [IsAuthor,]  # For prod
-    permission_classes = [AllowAny, ]  # For test
+    permission_classes = [
+        AllowAny,
+    ]  # For test
 
     def get_queryset(self):
         return self.request.user.social_links.all()

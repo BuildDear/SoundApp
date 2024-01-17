@@ -8,7 +8,7 @@ from ..models import AuthUser
 
 
 class JWTAuthentication(authentication.BaseAuthentication):
-    authentication_header_prefix = 'Token'
+    authentication_header_prefix = "Token"
 
     def authenticate(self, request):
         """
@@ -22,7 +22,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
             allowing DRF to handle the rest.
         """
         request.user = None
-        print('Hello')
+        print("Hello")
 
         # 'auth_header' should be an array with two elements:
         # 1) the name of the authentication header (Token in our case)
@@ -41,8 +41,8 @@ class JWTAuthentication(authentication.BaseAuthentication):
             # Incorrect token header, some extra whitespace
             return None
 
-        prefix = auth_header[0].decode('utf-8')
-        token = auth_header[1].decode('utf-8')
+        prefix = auth_header[0].decode("utf-8")
+        token = auth_header[1].decode("utf-8")
 
         if prefix.lower() != auth_header_prefix:
             # Incorrect header prefix - reject
@@ -60,17 +60,17 @@ class JWTAuthentication(authentication.BaseAuthentication):
         try:
             payload = jwt.decode(token, settings.SECRET_KEY)
         except Exception:
-            msg = 'Authentication error. Unable to decode the token.'
+            msg = "Authentication error. Unable to decode the token."
             raise exceptions.AuthenticationFailed(msg)
 
         try:
-            user = AuthUser.objects.get(pk=payload['id'])
+            user = AuthUser.objects.get(pk=payload["id"])
         except AuthUser.DoesNotExist:
-            msg = 'User corresponding to this token not found.'
+            msg = "User corresponding to this token not found."
             raise exceptions.AuthenticationFailed(msg)
 
         if not user.is_active:
-            msg = 'This user is deactivated.'
+            msg = "This user is deactivated."
             raise exceptions.AuthenticationFailed(msg)
 
         return (user, token)

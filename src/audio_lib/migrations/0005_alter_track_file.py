@@ -6,15 +6,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('audio_lib', '0004_alter_playlist_tracks'),
+        ("audio_lib", "0004_alter_playlist_tracks"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='track',
-            name='file',
-            field=models.FileField(blank=True, null=True, upload_to=src.base.services.get_path_upload_track, validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['mp3', 'wav'])]),
+            model_name="track",
+            name="file",
+            field=models.FileField(
+                blank=True,
+                null=True,
+                upload_to=src.base.services.get_path_upload_track,
+                validators=[
+                    django.core.validators.FileExtensionValidator(
+                        allowed_extensions=["mp3", "wav"]
+                    )
+                ],
+            ),
         ),
     ]

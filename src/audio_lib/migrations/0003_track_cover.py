@@ -6,15 +6,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('audio_lib', '0002_initial'),
+        ("audio_lib", "0002_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='track',
-            name='cover',
-            field=models.ImageField(blank=True, null=True, upload_to=src.base.services.get_path_upload_cover_track, validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['jpg']), src.base.services.validate_size_image]),
+            model_name="track",
+            name="cover",
+            field=models.ImageField(
+                blank=True,
+                null=True,
+                upload_to=src.base.services.get_path_upload_cover_track,
+                validators=[
+                    django.core.validators.FileExtensionValidator(
+                        allowed_extensions=["jpg"]
+                    ),
+                    src.base.services.validate_size_image,
+                ],
+            ),
         ),
     ]

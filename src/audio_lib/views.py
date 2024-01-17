@@ -14,15 +14,15 @@ from src.base.services import delete_old_file
 
 
 class GenreView(generics.ListAPIView):
-    """ List of genre
-    """
+    """List of genre"""
+
     queryset = models.Genre.objects.all()
     serializer_class = serializer.GenreSerializer
 
 
 class LicenseView(viewsets.ModelViewSet):
-    """ CRUD of author`s license
-    """
+    """CRUD of author`s license"""
+
     serializer_class = serializer.LicenseSerializer
     permission_classes = [IsAuthor]
 
@@ -34,11 +34,13 @@ class LicenseView(viewsets.ModelViewSet):
 
 
 class AlbumView(viewsets.ModelViewSet):
-    """ CRUD author`s albums
-    """
+    """CRUD author`s albums"""
+
     parser_classes = (parsers.MultiPartParser,)
     serializer_class = serializer.AlbumSerializer
-    permission_classes = [AllowAny, ]
+    permission_classes = [
+        AllowAny,
+    ]
 
     def get_queryset(self):
         return models.Album.objects.filter(user=self.request.user)
@@ -52,23 +54,23 @@ class AlbumView(viewsets.ModelViewSet):
 
 
 class PublicAlbumView(generics.ListAPIView):
-    """ List of public author`s albums
-    """
+    """List of public author`s albums"""
+
     serializer_class = serializer.AlbumSerializer
 
     def get_queryset(self):
-        return models.Album.objects.filter(user__id=self.kwargs.get('pk'), private=False)
+        return models.Album.objects.filter(
+            user__id=self.kwargs.get("pk"), private=False
+        )
 
 
 class TrackView(MixedSerializer, viewsets.ModelViewSet):
-    """ CRUD tracks
-    """
+    """CRUD tracks"""
+
     parser_classes = (parsers.MultiPartParser,)
     permission_classes = [IsAuthor]
     serializer_class = serializer.CreateAuthorTrackSerializer
-    serializer_classes_by_action = {
-        'list': serializer.AuthorTrackSerializer
-    }
+    serializer_classes_by_action = {"list": serializer.AuthorTrackSerializer}
 
     def get_queryset(self):
         return models.Track.objects.filter(user=self.request.user)
@@ -83,14 +85,12 @@ class TrackView(MixedSerializer, viewsets.ModelViewSet):
 
 
 class PlayListView(MixedSerializer, viewsets.ModelViewSet):
-    """ CRUD playlists
-    """
+    """CRUD playlists"""
+
     parser_classes = (parsers.MultiPartParser,)
     permission_classes = [IsAuthor]
     serializer_class = serializer.CreatePlayListSerializer
-    serializer_classes_by_action = {
-        'list': serializer.PlayListSerializer
-    }
+    serializer_classes_by_action = {"list": serializer.PlayListSerializer}
 
     def get_queryset(self):
         return models.PlayList.objects.filter(user=self.request.user)
@@ -104,34 +104,36 @@ class PlayListView(MixedSerializer, viewsets.ModelViewSet):
 
 
 class TrackListView(generics.ListAPIView):
-    """ List of all tracks
-    """
+    """List of all tracks"""
+
     queryset = models.Track.objects.filter(album__private=False, private=False)
     serializer_class = serializer.AuthorTrackSerializer
     pagination_class = Pagination
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['title', 'user__display_name', 'album__name', 'genre__name']
+    filterset_fields = ["title", "user__display_name", "album__name", "genre__name"]
 
 
 class AuthorTrackListView(generics.ListAPIView):
-    """ List of all author`s tracks
-    """
+    """List of all author`s tracks"""
+
     serializer_class = serializer.AuthorTrackSerializer
     pagination_class = Pagination
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['title', 'album__name', 'genre__name']
+    filterset_fields = ["title", "album__name", "genre__name"]
 
     def get_queryset(self):
         return models.Track.objects.filter(
-            user__id=self.kwargs.get('pk'), album__private=False, private=False
+            user__id=self.kwargs.get("pk"), album__private=False, private=False
         )
 
 
 class CommentAuthorView(viewsets.ModelViewSet):
-    """ CRUD author`s comments
-    """
+    """CRUD author`s comments"""
+
     serializer_class = serializer.CommentAuthorSerializer
-    permission_classes = [IsAuthor,]
+    permission_classes = [
+        IsAuthor,
+    ]
 
     def get_queryset(self):
         return models.Comment.objects.filter(user=self.request.user)
@@ -141,23 +143,23 @@ class CommentAuthorView(viewsets.ModelViewSet):
 
 
 class CommentView(viewsets.ModelViewSet):
-    """ Track`s comments
-    """
+    """Track`s comments"""
+
     serializer_class = serializer.CommentSerializer
 
     def get_queryset(self):
-        return models.Comment.objects.filter(track_id=self.kwargs.get('pk'))
+        return models.Comment.objects.filter(track_id=self.kwargs.get("pk"))
 
 
 class StreamingFileView(views.APIView):
-    """ Running track
-    """
+    """Running track"""
+
     def set_play(self, track: Track) -> None:
         track.plays_count += 1
         track.save()
 
     def get(self, request, pk):
-        """ Handle GET requests for streaming a track """
+        """Handle GET requests for streaming a track"""
         # Get the track or return a 404 response if not found
         self.track = get_object_or_404(Track, id=pk, private=False)
 
@@ -167,10 +169,10 @@ class StreamingFileView(views.APIView):
             self.set_play(self.track)
 
             # Prepare the response with appropriate headers
-            response = HttpResponse('', content_type="audio/mpeg", status=206)
+            response = HttpResponse("", content_type="audio/mpeg", status=206)
 
             # Use X-Accel-Redirect header to stream the file through Nginx
-            response['X-Accel-Redirect'] = f"/mp3/{self.track.file.name}"
+            response["X-Accel-Redirect"] = f"/mp3/{self.track.file.name}"
 
             return response
         else:
@@ -179,15 +181,14 @@ class StreamingFileView(views.APIView):
 
 
 class DownloadTrackView(views.APIView):
-    """ Downloading track
-    """
+    """Downloading track"""
 
     def set_download(self) -> None:
         self.track.download += 1
         self.track.save()
 
     def get(self, request, pk):
-        """ Handle GET requests for downloading a track """
+        """Handle GET requests for downloading a track"""
         # Get the track or return a 404 response if not found
         self.track = get_object_or_404(models.Track, id=pk, private=False)
 
@@ -197,11 +198,13 @@ class DownloadTrackView(views.APIView):
             self.set_download()
 
             # Prepare the response with appropriate headers
-            response = HttpResponse('', content_type="audio/mpeg", status=206)
-            response["Content-Disposition"] = f"attachment; filename={self.track.file.name}"
+            response = HttpResponse("", content_type="audio/mpeg", status=206)
+            response[
+                "Content-Disposition"
+            ] = f"attachment; filename={self.track.file.name}"
 
             # Use X-Accel-Redirect header to serve the file through Nginx
-            response['X-Accel-Redirect'] = f"/media/{self.track.file.name}"
+            response["X-Accel-Redirect"] = f"/media/{self.track.file.name}"
 
             return response
         else:
@@ -210,25 +213,24 @@ class DownloadTrackView(views.APIView):
 
 
 class StreamingFileAuthorView(views.APIView):
-    """ Running author`s track
-    """
+    """Running author`s track"""
+
     permission_classes = [IsAuthor]
 
     def get(self, request, pk):
-        """ Handle GET requests for streaming an author's track """
+        """Handle GET requests for streaming an author's track"""
         # Get the track or return a 404 response if not found
         self.track = get_object_or_404(Track, id=pk, user=request.user)
 
         # Check if the file exists on the server
         if os.path.exists(self.track.file.path):
             # Prepare the response with appropriate headers
-            response = HttpResponse('', content_type="audio/mpeg", status=206)
+            response = HttpResponse("", content_type="audio/mpeg", status=206)
 
             # Use X-Accel-Redirect header to stream the file through Nginx
-            response['X-Accel-Redirect'] = f"/mp3/{self.track.file.name}"
+            response["X-Accel-Redirect"] = f"/mp3/{self.track.file.name}"
 
             return response
         else:
             # Raise a 404 exception if the file is not found
             raise Http404("File not found")
-
