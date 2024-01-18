@@ -14,18 +14,6 @@ from . import base_auth
 logger = logging.getLogger(__name__)
 
 
-def log_function_call(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        logger.info(f"Calling {func.__name__} with arguments: {args}, {kwargs}")
-        result = func(*args, **kwargs)
-        logger.info(f"{func.__name__} returned: {result}")
-        return result
-
-    return wrapper
-
-
-@log_function_call
 def check_google_auth(google_user: serializer.GoogleAuth) -> dict:
     try:
         id_token.verify_oauth2_token(
