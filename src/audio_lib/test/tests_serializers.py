@@ -130,7 +130,6 @@ class CreateAuthorTrackSerializerTest(TestCase):
         license = License.objects.create(text="some text", user=user)
         genre = Genre.objects.create(name="genre")
 
-        # Змінено створення Track, додано user=user
         track = Track.objects.create(title="track", license=license, user=user)
         track.genre.add(genre)
 
