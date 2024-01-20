@@ -24,7 +24,7 @@ class GenreListAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-class LicenseViewTests(APITestCase):
+class LicenseAPITests(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.parser = MultiPartParser()
@@ -69,13 +69,15 @@ class LicenseViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_read_license(self):
-        url = f'/license/{self.license.id}/'
+        url = f'/license/'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, LicenseSerializer(self.license).data)
+
+        response_data = response.data[0]
+        self.assertEqual(response_data, LicenseSerializer(self.license).data)
 
     def test_update_license(self):
-        url = f'/license/{self.license.id}/'
+        url = f'/license/{self.license.id}'
         updated_data = {"text": "Updated license text"}
         response = self.client.put(url, updated_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -83,7 +85,7 @@ class LicenseViewTests(APITestCase):
         self.assertEqual(self.license.text, updated_data["text"])
 
     def test_delete_license(self):
-        url = f'/license/{self.license.id}/'
+        url = f'/license/{self.license.id}'
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(License.objects.filter(id=self.license.id).exists())
