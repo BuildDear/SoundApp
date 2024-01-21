@@ -1,3 +1,5 @@
+from unittest import TestCase
+
 from rest_framework.parsers import MultiPartParser
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
@@ -6,32 +8,11 @@ from src.audio_lib.serializer import LicenseSerializer
 from src.oauth.models import AuthUser
 
 
-class GenreListAPITests(APITestCase):
-    def setUp(self):
-        self.genre_data = {"name": "Rock"}
-        self.genre = Genre.objects.create(name="Pop")
-
-    def test_get_genres(self):
-        response = self.client.get('/genre/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_get_genres_invalid_path(self):
-        response = self.client.get('/wrong_path/')
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_get_genres_wrong_method(self):
-        response = self.client.post('/genre/')
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-
-class LicenseAPITests(APITestCase):
+class BaseTestCase(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.parser = MultiPartParser()
-        super().setUp()
-        self.create_active_user_and_get_token()
 
-    def create_active_user_and_get_token(self):
         active_user_data = {
             "email": "matema.group1@gmail.com",
             "password": "OLGGG1234olggg!!!***1234",
@@ -59,9 +40,31 @@ class LicenseAPITests(APITestCase):
         self.token = response.data["access"]
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
 
-        # Створення тестової ліцензії для цього користувача
         self.license_data = {"text": "Test license text"}
         self.license = License.objects.create(user=self.user, **self.license_data)
+
+
+class GenreListAPITests(APITestCase):
+    def setUp(self):
+        self.genre_data = {"name": "Rock"}
+        self.genre = Genre.objects.create(name="Pop")
+
+    def test_get_genres(self):
+        response = self.client.get('/genre/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_genres_invalid_path(self):
+        response = self.client.get('/wrong_path/')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_genres_wrong_method(self):
+        response = self.client.post('/genre/')
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+class LicenseAPITests(BaseTestCase):
+    def setUp(self):
+        super().setUp()
 
     def test_create_license(self):
         url = '/license/'

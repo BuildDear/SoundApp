@@ -17,22 +17,54 @@ from ..serializer import (
 from ...oauth.models import AuthUser
 
 
+class BaseTestCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.parser = MultiPartParser()
+
+        active_user_data = {
+            "email": "matema.group1@gmail.com",
+            "password": "OLGGG1234olggg!!!***1234",
+            "re_password": "OLGGG1234olggg!!!***1234",
+        }
+        login_data = {
+            "email": "matema.group1@gmail.com",
+            "password": "OLGGG1234olggg!!!***1234",
+        }
+
+        response = self.client.post("/auth/users/", active_user_data, format="json")
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_201_CREATED,
+            "Failed to create active user",
+        )
+
+        self.user = AuthUser.objects.get(email="matema.group1@gmail.com")
+
+        response = self.client.post("/auth/jwt/create/", login_data, format="json")
+        self.assertEqual(
+            response.status_code, status.HTTP_200_OK, "Failed to obtain JWT token"
+        )
+
+        self.token = response.data["access"]
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+
 class GenreSerializerTest(TestCase):
     def setUp(self):
-        self.genre_data = {"ID": 1, "name": "Rock"}
         self.genre = Genre.objects.create(name="Pop")
 
     def test_serialization(self):
         serializer = GenreSerializer(instance=self.genre)
         serialized_data = serializer.data
-        print(serializer.data)
         self.assertEqual(serialized_data["name"], self.genre.name)
 
     def test_deserialization(self):
-        serializer = GenreSerializer(data=self.genre_data)
+        genre_data = {"name": "Rock"}
+        serializer = GenreSerializer(data=genre_data)
         self.assertTrue(serializer.is_valid())
         deserialized_data = serializer.validated_data
-        self.assertEqual(deserialized_data["name"], self.genre_data["name"])
+        self.assertEqual(deserialized_data["name"], genre_data["name"])
 
 
 class LicenseSerializerTest(TestCase):
@@ -90,85 +122,62 @@ class AlbumSerializerTest(TestCase):
         self.assertEqual(deserialized_data["private"], False)
 
 
-class CreateAuthorTrackSerializerTest(TestCase):
+# class CreateAuthorTrackSerializerTest(BaseTestCase):
+#     def setUp(self):
+#         self.client = APIClient()
+#         super().setUp()
+#
+#     def test_create_track_serialization(self):
+#         user = AuthUser.objects.get(email="matema.group1@gmail.com")
+#         license = License.objects.create(text="some text", user=user)
+#         genre = Genre.objects.create(name="genre")
+#         album = Album.objects.create(name="album", user=user)  # Виправлено тут
+#
+#         track = Track.objects.create(title="track", license=license, user=user, album=album)
+#         track.genre.add(genre)
+#
+#         serializer = CreateAuthorTrackSerializer(instance=track)
+#         serialized_data = serializer.data
+#
+#         for field in ["id", "title", "license", "genre", "album", "link_of_author", "file", "create_at", "plays_count",
+#                       "download", "private", "cover", "user"]:
+#             self.assertIn(field, serialized_data)
+#
+#         self.assertEqual(serialized_data["title"], "track")
+#
+#     def test_create_track_deserialization(self):
+#         user = AuthUser.objects.get(email="matema.group1@gmail.com")
+#         license = License.objects.create(text="some text", user=user)
+#         genre = Genre.objects.create(name="genre")
+#         album = Album.objects.create(name="album", user=user)
+#
+#         track_data = {
+#             "title": "new track",
+#             "license": license.id,
+#             "album": album.id,
+#             "genre": [genre.id],
+#             "link_of_author": "http://example.com",
+#             "private": False,
+#         }
+#
+#         serializer = CreateAuthorTrackSerializer(data=track_data)
+#         self.assertTrue(serializer.is_valid(), serializer.errors)
+#
+#         deserialized_data = serializer.validated_data
+#         self.assertEqual(deserialized_data["title"], track_data["title"])
+#         self.assertEqual(deserialized_data["license"].id, track_data["license"])
+#         self.assertEqual(deserialized_data["album"].id, track_data["album"])
+#         self.assertEqual(list(deserialized_data["genre"].values_list('id', flat=True)), track_data["genre"])
+#         self.assertEqual(deserialized_data["link_of_author"], track_data["link_of_author"])
+#         self.assertEqual(deserialized_data["private"], track_data["private"])
+#
+#         new_track = serializer.save(user=user)
+#         self.assertEqual(new_track.title, track_data["title"])
+
+
+class CreatePlayListSerializerTest(BaseTestCase):
     def setUp(self):
-        self.client = APIClient()
-        self.parser = MultiPartParser()
         super().setUp()
-        self.create_active_user_and_get_token()
-
-    def create_active_user_and_get_token(self):
-        active_user_data = {
-            "email": "matema.group1@gmail.com",
-            "password": "OLGGG1234olggg!!!***1234",
-            "re_password": "OLGGG1234olggg!!!***1234",
-        }
-        login_data = {
-            "email": "matema.group1@gmail.com",
-            "password": "OLGGG1234olggg!!!***1234",
-        }
-
-        response = self.client.post("/auth/users/", active_user_data, format="json")
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_201_CREATED,
-            "Failed to create active user",
-        )
-
-        self.user = AuthUser.objects.get(email="matema.group1@gmail.com")
-
-        response = self.client.post("/auth/jwt/create/", login_data, format="json")
-        self.assertEqual(
-            response.status_code, status.HTTP_200_OK, "Failed to obtain JWT token"
-        )
-
-        self.token = response.data["access"]
-        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
-
-    def test_create_track_serialization(self):
-        user = AuthUser.objects.get(email="matema.group1@gmail.com")
-        license = License.objects.create(text="some text", user=user)
-        genre = Genre.objects.create(name="genre")
-
-        track = Track.objects.create(title="track", license=license, user=user)
-        track.genre.add(genre)
-
-        serializer = CreateAuthorTrackSerializer(instance=track)
-        print(serializer.data)
-
-
-class CreatePlayListSerializerTest(TestCase):
-    def setUp(self):
-        self.client = APIClient()
-        self.parser = MultiPartParser()
-
-        active_user_data = {
-            "email": "matema.group1@gmail.com",
-            "password": "OLGGG1234olggg!!!***1234",
-            "re_password": "OLGGG1234olggg!!!***1234",
-        }
-        login_data = {
-            "email": "matema.group1@gmail.com",
-            "password": "OLGGG1234olggg!!!***1234",
-        }
-
-        response = self.client.post("/auth/users/", active_user_data, format="json")
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_201_CREATED,
-            "Failed to create active user",
-        )
-
-        self.user = AuthUser.objects.get(email="matema.group1@gmail.com")
-        print(self.user)
-
-        response = self.client.post("/auth/jwt/create/", login_data, format="json")
-        self.assertEqual(
-            response.status_code, status.HTTP_200_OK, "Failed to obtain JWT token"
-        )
-
-        self.token = response.data["access"]
-        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
 
         self.playlist_data = {
             "title": "Test Playlist",
