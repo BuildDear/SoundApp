@@ -30,7 +30,7 @@ def get_path_upload_cover_playlist(instance, file):
 
 def validate_size_image(file_obj):
     """Check size of file"""
-    megabyte_limit = 2
+    megabyte_limit = 10
     if file_obj.size > megabyte_limit * 1024 * 1024:
         raise ValidationError(f"Max size of file {megabyte_limit}MB")
 

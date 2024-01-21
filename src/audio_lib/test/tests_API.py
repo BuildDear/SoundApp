@@ -1,14 +1,26 @@
+from io import BytesIO
 from unittest import TestCase
 
+from PIL import Image
+from django.core.files import File
+from django.core.files.base import ContentFile
 from rest_framework.parsers import MultiPartParser
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
-from src.audio_lib.models import Genre, License
+from src.audio_lib.models import Genre, License, Album
 from src.audio_lib.serializer import LicenseSerializer
 from src.oauth.models import AuthUser
 
 
 class BaseTestCase(APITestCase):
+
+    def create_dummy_image(self):
+        file = BytesIO()
+        image = Image.new('RGB', (100, 100), color='red')  # Create a red image
+        image.save(file, 'JPEG')
+        file.seek(0)
+        return ContentFile(file.read(), 'test.jpg')
+
     def setUp(self):
         self.client = APIClient()
         self.parser = MultiPartParser()
@@ -42,6 +54,14 @@ class BaseTestCase(APITestCase):
 
         self.license_data = {"text": "Test license text"}
         self.license = License.objects.create(user=self.user, **self.license_data)
+
+        self.album_data = {
+            'name': 'Test Album',
+            'description': 'Test Album Description',
+            'private': False,
+            'cover': self.create_dummy_image(),
+        }
+        self.album = Album.objects.create(user=self.user, **self.album_data)
 
 
 class GenreListAPITests(APITestCase):
@@ -92,3 +112,41 @@ class LicenseAPITests(BaseTestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(License.objects.filter(id=self.license.id).exists())
+
+
+class AlbumAPITest(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+
+    def test_create_album(self):
+        url = '/album/'
+        album_data = {
+            'name': 'New Test Album',
+            'description': 'New Test Album Description',
+            'private': False,
+            'cover': self.create_dummy_image(),
+        }
+        response = self.client.post(url, album_data, format='multipart')
+        if response.status_code != status.HTTP_201_CREATED:
+            print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_list_albums(self):
+        response = self.client.get('/album/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_update_album(self):
+        data = {
+            'name': 'New Album',
+            'description': 'New Album Description',
+            'private': True,
+
+        }
+        response = self.client.put(f'/album/{self.album.id}/', data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_album(self):
+        response = self.client.delete(f'/album/{self.album.id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Album.objects.filter(pk=self.album.pk).exists())
