@@ -6,9 +6,7 @@ def core_exception_handler(exc, context):
     # handler. Yet, if we are handling such type of exception, we need access to the DRF-generated response - let's
     # get it beforehand here.
     response = exception_handler(exc, context)
-    handlers = {
-        'ValidationError': _handle_generic_error
-    }
+    handlers = {"ValidationError": _handle_generic_error}
     # Determine the type of the current exception. We'll use this shortly to decide whether to handle it ourselves or
     # pass it to DRF.
     exception_class = exc.__class__.__name__
@@ -21,8 +19,6 @@ def core_exception_handler(exc, context):
 
 
 def _handle_generic_error(exc, context, response):
-    response.data = {
-        'errors': response.data
-    }
+    response.data = {"errors": response.data}
 
     return response

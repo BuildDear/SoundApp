@@ -3,11 +3,13 @@ import unittest
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.exceptions import ValidationError
 
-from src.base.services import (get_path_upload_avatar,
-                               get_path_upload_cover_album,
-                               get_path_upload_track,
-                               get_path_upload_cover_playlist,
-                               validate_size_image)
+from src.base.services import (
+    get_path_upload_avatar,
+    get_path_upload_cover_album,
+    get_path_upload_track,
+    get_path_upload_cover_playlist,
+    validate_size_image,
+)
 
 
 class TestFileFunctions(unittest.TestCase):
